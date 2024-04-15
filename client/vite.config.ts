@@ -1,23 +1,30 @@
-import { defineConfig } from 'vite'
+import { defineConfig, loadEnv } from 'vite'
 import { svelte } from '@sveltejs/vite-plugin-svelte'
+import path from 'path';
+
 
 // https://vitejs.dev/config/
-export default defineConfig({
-  // plugins: [svelte()],
-  plugins: [svelte({ hot: { preserveLocalState: true } })],
-  envDir: '../',
-  server: {
-    proxy: {
-      '/api': {
-        target: 'http://localhost:2567',
-        changeOrigin: true,
-        secure: false,
-        ws: true,
-        rewrite: (path) => path.replace(/^\/api/, ''),
+export default ({ mode }: { mode: string }) => {
+  process.env = { ...process.env, ...loadEnv(mode, path.join(process.cwd(), '..')) };
+
+  return defineConfig({
+    // plugins: [svelte()],
+    plugins: [svelte({ hot: { preserveLocalState: true } })],
+    envDir: '../',
+    server: {
+      proxy: {
+        '/api': {
+          target: process.env.VITE_SERVER_URL,
+          // target: 'http://localhost:2567',
+          changeOrigin: true,
+          secure: false,
+          ws: true,
+          rewrite: (path) => path.replace(/^\/api/, ''),
+        },
+      },
+      hmr: {
+        clientPort: 443,
       },
     },
-    hmr: {
-      clientPort: 443,
-    },
-  },
-})
+  });
+}
