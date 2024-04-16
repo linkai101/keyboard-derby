@@ -5,7 +5,7 @@ import path from 'path';
 
 // https://vitejs.dev/config/
 export default ({ mode }: { mode: string }) => {
-  process.env = { ...process.env, ...loadEnv(mode, path.join(process.cwd(), '..')) };
+  const env = loadEnv(mode, path.join(process.cwd(), '..'), '')
 
   return defineConfig({
     // plugins: [svelte()],
@@ -14,7 +14,7 @@ export default ({ mode }: { mode: string }) => {
     server: {
       proxy: {
         '/api': {
-          target: process.env.VITE_SERVER_URL,
+          target: JSON.stringify(env.VITE_SERVER_URL),
           // target: 'http://localhost:2567',
           changeOrigin: true,
           secure: false,
