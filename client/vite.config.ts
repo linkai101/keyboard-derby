@@ -1,11 +1,12 @@
 import { defineConfig, loadEnv } from 'vite'
 import { svelte } from '@sveltejs/vite-plugin-svelte'
-import path from 'path';
+import path from 'path'
 
 
 // https://vitejs.dev/config/
 export default ({ mode }: { mode: string }) => {
   const env = loadEnv(mode, path.join(process.cwd(), '..'), '')
+  console.log(mode)
 
   return defineConfig({
     // plugins: [svelte()],
@@ -17,7 +18,8 @@ export default ({ mode }: { mode: string }) => {
           target: JSON.stringify(env.VITE_SERVER_URL),
           // target: 'http://localhost:2567',
           changeOrigin: true,
-          secure: false,
+          // secure: false,
+          secure: mode === 'development' ? false : true,
           ws: true,
           rewrite: (path) => path.replace(/^\/api/, ''),
         },
