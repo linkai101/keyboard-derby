@@ -89,7 +89,7 @@ export class ChannelRoomState extends Schema {
         });
         break;
       case 'countdown':
-        this.prompt = 'The quick brown fox jumps over the lazy dog.';
+        this.setPrompt();
 
         this.players.forEach(p => {
           if (p.isDisconnected && !p.isReady) this.players.delete(p.userId);
@@ -108,5 +108,18 @@ export class ChannelRoomState extends Schema {
     }
 
     room.broadcast('game_state', { gameState: newGameState });
+  }
+
+  setPrompt() {
+    const prompts = [
+      "The old oak tree stood tall in the center of the meadow, its branches reaching towards the sky. Underneath its sprawling canopy, wildflowers bloomed in a riot of colors, swaying gently in the breeze. A tranquil oasis amidst the chaos of the surrounding forest.",
+      "As dusk fell, the sleepy town came to life with the soft glow of streetlights. Couples strolled hand in hand along the cobblestone streets, their laughter mingling with the distant hum of cars. The aroma of freshly baked bread wafted from the local bakery, enticing passersby with its irresistible scent.",
+      "Amidst the rolling hills of the countryside, a quaint farmhouse nestled against the backdrop of a golden sunset. Smoke billowed from the chimney, carrying the scent of a home-cooked meal into the crisp evening air. The distant sound of sheep bleating echoed across the fields, a reminder of the simple joys of rural life.",
+      "In the heart of the bustling city, a lone street performer captivated passersby with the soulful melody of his guitar. His fingers danced across the strings, weaving a tapestry of sound that echoed off the walls of skyscrapers. A moment of serenity amidst the chaos of urban life.",
+      "Beneath the starry night sky, a campfire crackled merrily, casting flickering shadows on the faces of friends gathered around. They shared stories of adventure and laughter, their voices rising and falling like the waves of the nearby ocean. A bond forged in the simplicity of nature's embrace.",
+      "As dawn broke over the horizon, the sleepy village awoke to the chorus of birdsong. Fishermen set sail on tranquil waters, their boats gliding gracefully across the mirrored surface of the lake. The promise of a new day whispered in the gentle rustle of leaves, a reminder of life's endless possibilities.",
+    ];
+
+    this.prompt = prompts[Math.floor(Math.random() * prompts.length)];
   }
 }
